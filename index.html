@@ -152,12 +152,33 @@
             background: rgba(0, 0, 0, 0.2);
             display: none;
         }
+
+        .logo {
+            width: 100px; /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+
+        .login-container img {
+            width: 100px; /* Logo size */
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container img:hover {
+            transform: scale(1.1);
+        }
+
+
+
+
     </style>
 </head>
 <body>
 
     <div class="login-container">
-        <h2>Login</h2>
+        <img src="Asset.png" alt="Logo" class="logo"> <!-- Logo Added Here -->
         <input type="text" class="input-field" id="email" placeholder="Email">
         <input type="password" class="input-field" id="password" placeholder="Password">
         <button class="btn" onclick="login()">Login</button>
