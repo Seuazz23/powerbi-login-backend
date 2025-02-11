@@ -42,11 +42,22 @@
         }
     </style>
     <script>
+        function checkAuth() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("⚠️ Please log in first!");
+                window.location.href = "index.html"; // Redirect to login page
+            }
+        }
+
         function logout() {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
-            window.location.href = "index.html";
+            window.location.href = "index.html"; // Redirect to login page after logout
         }
+
+        // Run checkAuth() when the page loads
+        window.onload = checkAuth;
     </script>
 </head>
 <body>
