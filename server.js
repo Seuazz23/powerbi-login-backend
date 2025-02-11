@@ -11,7 +11,9 @@ const PORT = 5000;
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: "*" })); // Allow all origins
+app.use(cors({
+  origin: 'https://charming-marshmallow-9ca612.netlify.app',  // Update with your actual frontend URL
+}));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
