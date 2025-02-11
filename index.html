@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #00b09b, #96c93d);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 380px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), 
+                        inset -2px -2px 5px rgba(255, 255, 255, 0.7);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            box-shadow: inset 2px 2px 8px rgba(0, 176, 155, 0.5);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #00b09b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #007d6e;
+        }
+
+        .error-message {
+            color: red;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .links a {
+            color: #007d6e;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: none;
+        }
+
+        .popup input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .popup button {
+            width: 100%;
+            padding: 10px;
+            background: #007d6e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .popup button:hover {
+            background: #005f56;
+        }
+
+        .popup .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #777;
+        }
+
+        .blur {
+            backdrop-filter: blur(8px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" class="input-field" id="email" placeholder="Email">
+        <input type="password" class="input-field" id="password" placeholder="Password">
+        <button class="btn" onclick="login()">Login</button>
+        <div id="error-message" class="error-message">Invalid email or password!</div>
+        <div class="links">
+            <a href="#" onclick="openRegister()">Register</a>
+            <a href="#" onclick="openForgot()">Forgot Password?</a>
+        </div>
+    </div>
+
+    <div class="blur" id="blur"></div>
+
+    <div class="popup" id="register-popup">
+        <span class="close" onclick="closeRegister()">&times;</span>
+        <h3>Register</h3>
+        <input type="email" id="reg-email" placeholder="Email">
+        <input type="password" id="reg-password" placeholder="Password">
+        <button onclick="register()">Sign Up</button>
+    </div>
+
+    <div class="popup" id="forgot-popup">
+        <span class="close" onclick="closeForgot()">&times;</span>
+        <h3>Forgot Password</h3>
+        <input type="email" id="reset-email" placeholder="Enter your email">
+        <button onclick="sendOTP()">Send OTP</button>
+        <input type="text" id="otp" placeholder="Enter OTP">
+        <input type="password" id="new-password" placeholder="New Password">
+        <button onclick="resetPassword()">Reset Password</button>
+    </div>
+
+    <script>
+        function login() {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            fetch("http://localhost:5000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    window.location.href = "dashboard.html";
+                } else {
+                    document.getElementById("error-message").innerText = data.message;
+                    document.getElementById("error-message").style.display = "block";
+                }
+            })
+            .catch(error => console.error("Login error:", error));
+        }
+
+        function register() {
+            var email = document.getElementById("reg-email").value;
+            var password = document.getElementById("reg-password").value;
+
+            fetch("http://localhost:5000/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                closeRegister();
+                if (data.success) {
+                    closeRegister();
+                }
+            })
+            .catch(error => console.error("Registration error:", error));
+        }
+
+
+        function sendOTP() {
+            var email = document.getElementById("reset-email").value;
+
+            fetch("http://localhost:5000/forgot-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email})
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                
+                if (data.success) {
+                    
+                }
+            })
+            .catch(error => console.error("forgot-password error:", error));
+        }
+        
+
+        function resetPassword() {
+            var email = document.getElementById("reset-email").value;
+            var otp = document.getElementById("otp").value;
+            var newPassword = document.getElementById("new-password").value;
+
+
+            fetch("http://localhost:5000/reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email , otp , newPassword})
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                closeForgot();
+                if (data.success) {
+                    closeForgot();
+                }
+            })
+            .catch(error => console.error("reset-password error:", error));
+        }
+
+
+        function openRegister() {
+            document.getElementById("register-popup").style.display = "block";
+            document.getElementById("blur").style.display = "block";
+            document.getElementById("reg-email").value = "";
+            document.getElementById("reg-password").value = "";
+        }
+
+        function closeRegister() {
+            document.getElementById("register-popup").style.display = "none";
+            document.getElementById("blur").style.display = "none";
+        }
+        
+
+        function openForgot() {
+            document.getElementById("forgot-popup").style.display = "block";
+            document.getElementById("blur").style.display = "block";
+            document.getElementById("reset-email").value = "";
+            document.getElementById("otp").value = "";
+            document.getElementById("new-password").value = "";
+        }
+
+        function closeForgot() {
+            document.getElementById("forgot-popup").style.display = "none";
+            document.getElementById("blur").style.display = "none";
+        }
+
+      
+    </script>
+
+</body>
+</html> 

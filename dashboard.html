@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Dashboard</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .dashboard {
+            width: 100%;
+            height: 100vh;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .logout-button:hover {
+            background: darkred;
+        }
+    </style>
+    <script>
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "index.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard">
+        <button class="logout-button" onclick="logout()">Logout</button>
+        <iframe src="https://app.powerbi.com/view?r=eyJrIjoiYTMxY2UyYmQtMDYzNy00NjBmLWIxMjAtMjMzNTE0NzMzOWMwIiwidCI6ImMyZWMwODE0LTNiNTItNGE4Mi1hNmIzLTQzNDBmNmQ5ZWZiMyIsImMiOjEwfQ%3D%3D"></iframe>
+    </div>
+</body>
+</html>
