@@ -193,7 +193,7 @@
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
 
-            fetch("https://charming-marshmallow-9ca612.netlify.app/login", {
+            fetch("https://powerbi-login-backend.onrender.com/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
@@ -216,7 +216,7 @@
             var email = document.getElementById("reg-email").value;
             var password = document.getElementById("reg-password").value;
 
-            fetch("https://charming-marshmallow-9ca612.netlify.app/register", {
+            fetch("https://powerbi-login-backend.onrender.com/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
@@ -236,7 +236,7 @@
         function sendOTP() {
             var email = document.getElementById("reset-email").value;
 
-            fetch("https://charming-marshmallow-9ca612.netlify.app/forgot-password", {
+            fetch("https://powerbi-login-backend.onrender.com/forgot-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email})
@@ -259,7 +259,7 @@
             var newPassword = document.getElementById("new-password").value;
 
 
-            fetch("https://charming-marshmallow-9ca612.netlify.app/reset-password", {
+            fetch("https://powerbi-login-backend.onrender.com/reset-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email , otp , newPassword})
