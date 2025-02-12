@@ -12,7 +12,7 @@ const PORT = 5000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'https://apbdashborad.netlify.app/',  // Update with your actual frontend URL
+  origin: 'https://apbdashborad.netlify.app',  // Update with your actual frontend URL
 }));
 
 // MongoDB Connection
